@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل نظام موزّع البطاريات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Cairo+Play:wght@700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;
+  --bg2:#13161e;
+  --bg3:#1a1e28;
+  --card:#1e2330;
+  --card2:#252b3a;
+  --border:#2e3548;
+  --accent:#4f8ef7;
+  --accent2:#6ea3ff;
+  --green:#3ecf8e;
+  --orange:#f59e42;
+  --red:#f45d5d;
+  --purple:#a78bfa;
+  --teal:#2dd4bf;
+  --text:#e8eaf0;
+  --text2:#9aa0b8;
+  --text3:#5c637a;
+  --radius:12px;
+  --radius-sm:8px;
+}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.7}
+
+/* SIDEBAR */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--bg2);border-left:1px solid var(--border);position:fixed;top:0;right:0;height:100vh;overflow-y:auto;z-index:100;padding:0 0 2rem}
+.sidebar-header{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border);margin-bottom:0.5rem}
+.sidebar-logo{font-family:'Cairo Play',sans-serif;font-size:1.1rem;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:8px}
+.sidebar-logo span{font-size:1.4rem}
+.sidebar-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.nav-section{padding:0.5rem 1rem 0.25rem;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:0.5rem}
+.nav-item{display:flex;align-items:center;gap:8px;padding:0.5rem 1.25rem;cursor:pointer;border-radius:0;transition:all .2s;font-size:13.5px;color:var(--text2);border-right:3px solid transparent;margin:1px 0}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:rgba(79,142,247,.1);color:var(--accent);border-right-color:var(--accent)}
+.nav-icon{width:20px;text-align:center;font-size:15px;flex-shrink:0}
+
+/* MAIN */
+.main{margin-right:260px;flex:1;padding:2rem}
+.page{display:none}
+.page.active{display:block}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a2035 0%,#0d1829 50%,#0f1a14 100%);border:1px solid var(--border);border-radius:var(--radius);padding:3rem 2.5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(79,142,247,.07);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:140px;height:140px;border-radius:50%;background:rgba(62,207,142,.05);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.3);color:var(--accent);padding:4px 14px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:1.2rem}
+.hero-title{font-family:'Cairo Play',sans-serif;font-size:2.2rem;font-weight:700;line-height:1.2;margin-bottom:0.8rem}
+.hero-title em{color:var(--accent);font-style:normal}
+.hero-desc{color:var(--text2);font-size:15px;max-width:600px;line-height:1.8}
+.hero-stats{display:flex;gap:2rem;margin-top:2rem;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:1.8rem;font-weight:700;color:var(--accent)}
+.hero-stat-lbl{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* SECTION TITLE */
+.section-title{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:700;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border)}
+.section-title .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* CARDS GRID */
+.grid{display:grid;gap:1rem}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-3{grid-template-columns:1fr 1fr 1fr}
+.grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+.card-sm{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem}
+.card:hover{border-color:var(--border);background:var(--card2)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.badge-blue{background:rgba(79,142,247,.12);color:var(--accent)}
+.badge-green{background:rgba(62,207,142,.12);color:var(--green)}
+.badge-orange{background:rgba(245,158,66,.12);color:var(--orange)}
+.badge-red{background:rgba(244,93,93,.12);color:var(--red)}
+.badge-purple{background:rgba(167,139,250,.12);color:var(--purple)}
+.badge-teal{background:rgba(45,212,191,.12);color:var(--teal)}
+.badge-gray{background:rgba(156,160,184,.1);color:var(--text2)}
+
+/* ROLE CHIP */
+.role-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;margin:2px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--bg3);color:var(--text2);font-weight:600;padding:10px 14px;text-align:right;border-bottom:1px solid var(--border);font-size:12px}
+td{padding:10px 14px;border-bottom:1px solid rgba(46,53,72,.5);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.page-title{font-family:'Cairo Play',sans-serif;font-size:1.5rem;font-weight:700}
+.page-subtitle{color:var(--text2);font-size:13px;margin-top:2px}
+
+/* DB FIELD */
+.field{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:var(--radius-sm);margin-bottom:4px}
+.field:hover{background:var(--bg3)}
+.field-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px}
+.field-name{font-weight:600;font-size:13.5px;min-width:180px}
+.field-desc{color:var(--text2);font-size:13px}
+.field-req{color:var(--red);font-size:11px;margin-right:4px}
+
+/* FLOW */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:1rem 0}
+.flow-step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 1rem;font-size:13px;font-weight:600;white-space:nowrap}
+.flow-arrow{color:var(--text3);padding:0 6px;font-size:18px}
+
+/* MOCKUP */
+.mockup{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.mockup-bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3)}
+.mockup-dot{width:8px;height:8px;border-radius:50%}
+.mockup-body{padding:1.25rem}
+
+/* MODAL MOCKUP */
+.modal-overlay{background:rgba(13,15,20,.85);border-radius:var(--radius-sm);padding:2rem;text-align:center}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:420px;margin:0 auto;text-align:right}
+.modal-title{font-weight:700;font-size:15px;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border)}
+.form-group{margin-bottom:0.9rem}
+.form-label{display:block;font-size:12px;color:var(--text2);font-weight:600;margin-bottom:5px}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;color:var(--text);font-size:13.5px;font-family:'Cairo',sans-serif;outline:none}
+.form-input:focus{border-color:var(--accent)}
+.form-select{appearance:none;cursor:pointer}
+.form-btn{padding:9px 20px;border-radius:var(--radius-sm);border:none;font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-success{background:var(--green);color:#0d0f14}
+.btn-orange{background:var(--orange);color:#fff}
+
+/* KPI */
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.4rem}
+.kpi-label{font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px}
+.kpi-value{font-size:1.6rem;font-weight:700}
+.kpi-sub{font-size:12px;color:var(--text2);margin-top:4px}
+.kpi-icon{float:left;font-size:1.6rem;opacity:.6}
+
+/* ROLE MATRIX */
+.role-row{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid rgba(46,53,72,.4)}
+.role-name{font-weight:600;font-size:13px;min-width:120px}
+.check{color:var(--green);font-size:14px}
+.cross{color:var(--red);font-size:14px;opacity:.5}
+
+/* ARCH DIAGRAM */
+.arch{display:flex;flex-direction:column;gap:12px;padding:1.5rem;background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border)}
+.arch-layer{display:flex;gap:8px;align-items:stretch;position:relative}
+.arch-box{flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;text-align:center;font-size:13px;font-weight:600}
+.arch-box-sub{font-size:11px;color:var(--text3);font-weight:400;margin-top:3px}
+.arch-arrow{text-align:center;color:var(--text3);font-size:18px;margin:0 auto}
+
+/* ACCORDION */
+.acc-item{border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;overflow:hidden}
+.acc-header{padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px;background:var(--card);transition:background .15s}
+.acc-header:hover{background:var(--card2)}
+.acc-icon{transition:transform .2s;font-size:18px}
+.acc-body{display:none;padding:14px 16px;background:var(--bg3);font-size:13.5px;color:var(--text2);line-height:1.8}
+.acc-item.open .acc-body{display:block}
+.acc-item.open .acc-icon{transform:rotate(90deg)}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem;overflow-x:auto}
+.tab{padding:8px 18px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ALERT */
+.alert{padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-bottom:10px;display:flex;gap:8px;align-items:flex-start}
+.alert-info{background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.2);color:var(--accent2)}
+.alert-warn{background:rgba(245,158,66,.1);border:1px solid rgba(245,158,66,.2);color:var(--orange)}
+.alert-success{background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.2);color:var(--green)}
+.alert-danger{background:rgba(244,93,93,.1);border:1px solid rgba(244,93,93,.2);color:var(--red)}
+
+/* SECRET FIELD */
+.secret-field{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-size:13px;cursor:pointer;transition:all .2s;user-select:none}
+.secret-field:hover{border-color:var(--accent);color:var(--accent)}
+.secret-field .stars{letter-spacing:2px;font-size:14px}
+
+/* CHART MOCKUP */
+.chart-bar{display:flex;align-items:flex-end;gap:8px;height:80px;padding:0 8px}
+.bar{background:var(--accent);border-radius:3px 3px 0 0;flex:1;opacity:.7;transition:opacity .2s;min-width:20px}
+.bar:hover{opacity:1}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-right:0;padding:1rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .hero-title{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><span>🔋</span> Battery ERP</div>
+    <div class="sidebar-sub">دليل النظام التفاعلي</div>
+  </div>
+
+  <div class="nav-section">عام</div>
+  <div class="nav-item active" onclick="showPage('overview')"><span class="nav-icon">🏠</span> نظرة عامة</div>
+  <div class="nav-item" onclick="showPage('database')"><span class="nav-icon">🗄️</span> قاعدة البيانات</div>
+  <div class="nav-item" onclick="showPage('roles')"><span class="nav-icon">👥</span> الأدوار والصلاحيات</div>
+
+  <div class="nav-section">الصفحات الرئيسية</div>
+  <div class="nav-item" onclick="showPage('login')"><span class="nav-icon">🔐</span> تسجيل الدخول</div>
+  <div class="nav-item" onclick="showPage('dashboard')"><span class="nav-icon">📊</span> لوحة التحكم</div>
+  <div class="nav-item" onclick="showPage('daily')"><span class="nav-icon">📅</span> اليومية – تسجيل البيع</div>
+  <div class="nav-item" onclick="showPage('orders')"><span class="nav-icon">🛒</span> إدارة الطلبات</div>
+  <div class="nav-item" onclick="showPage('customers')"><span class="nav-icon">👤</span> إدارة العملاء</div>
+
+  <div class="nav-section">المخازن</div>
+  <div class="nav-item" onclick="showPage('warehouse-new')"><span class="nav-icon">📦</span> مخزن الجديد</div>
+  <div class="nav-item" onclick="showPage('warehouse-return')"><span class="nav-icon">🔄</span> مخزن المرتجع</div>
+  <div class="nav-item" onclick="showPage('warehouse-scrap')"><span class="nav-icon">♻️</span> مخزن الخردة</div>
+  <div class="nav-item" onclick="showPage('branches')"><span class="nav-icon">🏪</span> الفروع والعربيات</div>
+
+  <div class="nav-section">إدارة</div>
+  <div class="nav-item" onclick="showPage('products')"><span class="nav-icon">🔋</span> المنتجات</div>
+  <div class="nav-item" onclick="showPage('companies')"><span class="nav-icon">🏭</span> الشركات</div>
+  <div class="nav-item" onclick="showPage('expenses')"><span class="nav-icon">💸</span> المصاريف</div>
+  <div class="nav-item" onclick="showPage('reports')"><span class="nav-icon">📈</span> التقارير</div>
+
+  <div class="nav-section">نظام</div>
+  <div class="nav-item" onclick="showPage('settings')"><span class="nav-icon">⚙️</span> الإعدادات</div>
+  <div class="nav-item" onclick="showPage('activity')"><span class="nav-icon">📋</span> سجل النشاط</div>
+  <div class="nav-item" onclick="showPage('security')"><span class="nav-icon">🔒</span> الأمان وسعر التكلفة</div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ======================== OVERVIEW ======================== -->
+<div class="page active" id="page-overview">
+  <div class="hero">
+    <div class="hero-badge">⚡ نظام ERP متكامل</div>
+    <div class="hero-title">نظام موزّع <em>البطاريات</em></div>
+    <div class="hero-desc">نظام متكامل لإدارة مخزون البطاريات، المبيعات، المرتجعات، والعملاء — مع تتبع كامل لكل حركة وإدارة فروع متعددة.</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">15+</div><div class="hero-stat-lbl">صفحة رئيسية</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">4</div><div class="hero-stat-lbl">أدوار مستخدمين</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-lbl">أنواع مخازن</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">∞</div><div class="hero-stat-lbl">تتبع كامل</div></div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot"></div> مكونات النظام الرئيسية</div>
+  <div class="grid grid-3" style="margin-bottom:1.5rem">
+    <div class="card" style="border-color:rgba(79,142,247,.3)">
+      <div style="font-size:1.8rem;margin-bottom:8px">📦</div>
+      <div style="font-weight:700;margin-bottom:6px">إدارة المخازن</div>
+      <div style="color:var(--text2);font-size:13px">مخزن جديد + مرتجع + خردة + فروع فرعية متعددة</div>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">رئيسي</span>
+        <span class="badge badge-orange">مرتجع</span>
+        <span class="badge badge-gray">خردة</span>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(62,207,142,.3)">
+      <div style="font-size:1.8rem;margin-bottom:8px">💰</div>
+      <div style="font-weight:700;margin-bottom:6px">المبيعات والطلبات</div>
+      <div style="color:var(--text2);font-size:13px">اليومية + طلبات العملاء + سجلات العملاء الدائمين</div>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-green">يومية</span>
+        <span class="badge badge-green">طلبات</span>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(167,139,250,.3)">
+      <div style="font-size:1.8rem;margin-bottom:8px">📊</div>
+      <div style="font-weight:700;margin-bottom:6px">التقارير والتحليل</div>
+      <div style="color:var(--text2);font-size:13px">6 أنواع تقارير مع فلاتر مرنة وتصدير Excel/PDF</div>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-purple">مبيعات</span>
+        <span class="badge badge-purple">أرباح</span>
+        <span class="badge badge-purple">مخزون</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot" style="background:var(--green)"></div> معمارية النظام</div>
+  <div class="arch">
+    <div class="arch-layer">
+      <div class="arch-box" style="border-color:rgba(79,142,247,.4);background:rgba(79,142,247,.06)">
+        <div>🌐 واجهة المستخدم</div>
+        <div class="arch-box-sub">Web / Mobile</div>
+      </div>
+    </div>
+    <div class="arch-arrow">↕️</div>
+    <div class="arch-layer">
+      <div class="arch-box">🔐 نظام المصادقة<div class="arch-box-sub">4 أدوار + كوكيز 5 أيام</div></div>
+      <div class="arch-box">📡 API Layer<div class="arch-box-sub">REST API</div></div>
+      <div class="arch-box">🔒 Password Protect<div class="arch-box-sub">حماية سعر التكلفة</div></div>
+    </div>
+    <div class="arch-arrow">↕️</div>
+    <div class="arch-layer">
+      <div class="arch-box">👥 المستخدمون<div class="arch-box-sub">Users Table</div></div>
+      <div class="arch-box">🔋 المنتجات<div class="arch-box-sub">Products + Companies</div></div>
+      <div class="arch-box">📦 المخزون<div class="arch-box-sub">3 مخازن</div></div>
+      <div class="arch-box">💼 الطلبات<div class="arch-box-sub">Orders + Customers</div></div>
+    </div>
+    <div class="arch-arrow">↕️</div>
+    <div class="arch-layer">
+      <div class="arch-box" style="border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.06)">
+        <div>🗄️ قاعدة البيانات</div>
+        <div class="arch-box-sub">+ أرشيف المحذوفات + سجل النشاط</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DATABASE ======================== -->
+<div class="page" id="page-database">
+  <div class="page-header">
+    <div><div class="page-title">🗄️ قاعدة البيانات</div><div class="page-subtitle">هيكل الجداول وعلاقاتها</div></div>
+  </div>
+
+  <div class="tabs" id="db-tabs">
+    <div class="tab active" onclick="switchTab('db','users')">👥 المستخدمين</div>
+    <div class="tab" onclick="switchTab('db','companies')">🏭 الشركات</div>
+    <div class="tab" onclick="switchTab('db','products')">🔋 البطاريات</div>
+    <div class="tab" onclick="switchTab('db','warehouse')">📦 المخازن</div>
+    <div class="tab" onclick="switchTab('db','returns')">🔄 المرتجع</div>
+    <div class="tab" onclick="switchTab('db','scrap')">♻️ الخردة</div>
+    <div class="tab" onclick="switchTab('db','branches')">🏪 الفروع</div>
+    <div class="tab" onclick="switchTab('db','expenses')">💸 المصاريف</div>
+    <div class="tab" onclick="switchTab('db','orders')">🛒 الطلبات</div>
+  </div>
+
+  <div class="tab-panel active" id="db-tab-users">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">جدول المستخدمين <span class="badge badge-blue">users</span></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ID</div><div class="field-desc">رقم تسلسلي تلقائي</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">الاسم <span class="field-req">*</span></div><div class="field-desc">اسم المستخدم الكامل</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">رقم التلفون <span class="field-req">*</span></div><div class="field-desc">يُستخدم للدخول بدلاً من البريد الإلكتروني</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">كلمة المرور <span class="field-req">*</span></div><div class="field-desc">مُشفّرة في قاعدة البيانات</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">الدور</div><div class="field-desc">
+        <span class="badge badge-red">admin</span>
+        <span class="badge badge-blue">accountant</span>
+        <span class="badge badge-green">representative</span>
+        <span class="badge badge-orange">customer</span>
+      </div></div>
+      <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">حالة الحساب</div><div class="field-desc"><span class="badge badge-green">active</span> <span class="badge badge-gray">inactive</span></div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-companies">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">جدول الشركات <span class="badge badge-blue">companies</span></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ID</div><div class="field-desc">رقم تسلسلي</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">اسم الشركة <span class="field-req">*</span></div><div class="field-desc">اسم شركة التوريد</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">رقم التلفون</div><div class="field-desc">اختياري</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ملاحظة</div><div class="field-desc">ملاحظات إضافية</div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-products">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">جدول البطاريات <span class="badge badge-blue">products / batteries</span></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ID</div><div class="field-desc">رقم تسلسلي</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">اسم البطارية <span class="field-req">*</span></div><div class="field-desc">مثال: 70 نسر، 40 أنكر</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">الشركة</div><div class="field-desc">Dropdown من الشركات المسجّلة</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">الطراز</div><div class="field-desc">اختياري</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ الإنتاج</div><div class="field-desc">مثال: 2025-01-10</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">شهر الإنتاج</div><div class="field-desc">⚙️ يُحسب تلقائياً من تاريخ الإنتاج (مثال: 01)</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ الدخول</div><div class="field-desc">تاريخ إضافة المنتج للسيستم</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--red)"></div><div class="field-name">سعر التكلفة للوحدة <span class="field-req">*</span></div><div class="field-desc">
+        <div class="secret-field" onclick="alert('أدخل كلمة المرور لعرض سعر التكلفة')"><span class="stars">●●●●●</span> <span style="font-size:11px">اضغط لعرض</span></div>
+        <span style="font-size:12px;color:var(--text3);margin-right:8px">محمي بكلمة مرور في كل أنحاء النظام</span>
+      </div></div>
+      <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">سعر البيع للوحدة <span class="field-req">*</span></div><div class="field-desc">السعر الأساسي للبيع</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ملاحظة</div><div class="field-desc">اختياري</div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-warehouse">
+    <div class="grid grid-2" style="gap:1rem">
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:1rem;font-size:15px">مخزن الجديد <span class="badge badge-blue">warehouse_new</span></div>
+        <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">رابط للبطارية</div><div class="field-desc">Foreign Key → products</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">الكمية المتوفرة</div><div class="field-desc">عدد الوحدات</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ وصول البطارية</div><div class="field-desc">تاريخ دخول الدفعة</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--red)"></div><div class="field-name">توتل سعر التكلفة</div><div class="field-desc">⚙️ تلقائي: الكمية × سعر التكلفة</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">توتل سعر البيع</div><div class="field-desc">⚙️ تلقائي: الكمية × سعر البيع</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">المستخدم المسجّل</div><div class="field-desc">Foreign Key → users</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ملاحظات</div><div class="field-desc">اختياري</div></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:1rem;font-size:15px">مخزن الفرع <span class="badge badge-orange">branch_inventory</span></div>
+        <div class="alert alert-info"><span>💡</span> البضاعة تُخصم من المخزن الرئيسي عند نقلها للفرع</div>
+        <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">الفرع</div><div class="field-desc">Foreign Key → branches</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">المنتج</div><div class="field-desc">Foreign Key → products</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">عدد المنتجات</div><div class="field-desc">الكمية في الفرع</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--red)"></div><div class="field-name">توتل سعر التكلفة</div><div class="field-desc">⚙️ محسوب تلقائياً</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">توتل سعر البيع</div><div class="field-desc">⚙️ محسوب تلقائياً</div></div>
+        <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ الإضافة</div><div class="field-desc">تاريخ نقل البضاعة</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-returns">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">مخزن المرتجع <span class="badge badge-orange">warehouse_returns</span></div>
+      <div class="alert alert-warn"><span>⚠️</span> المرتجع مستقل تماماً — لا يُضاف لمخزن الجديد</div>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ID</div><div class="field-desc">رقم تسلسلي</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">اسم البطارية <span class="field-req">*</span></div><div class="field-desc">يدوي أو Dropdown</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">الطراز</div><div class="field-desc">اختياري</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">الشركة الموردة</div><div class="field-desc">Dropdown أو إدخال يدوي (للضمان)</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--orange)"></div><div class="field-name">العميل</div><div class="field-desc">Dropdown من العملاء أو إضافة اسم</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">كود داخلي</div><div class="field-desc">⚙️ تلقائي: DDMMYYYY + رقم تسلسلي (مثال: 010226-1)</div></div>
+        </div>
+        <div>
+          <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">كود الشركة</div><div class="field-desc">كود الضمان من الشركة الموردة</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ الاستلام</div><div class="field-desc">من العميل</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--red)"></div><div class="field-name">كم عليها</div><div class="field-desc">سعر الاستهلاك — الافتراضي: <strong>0</strong></div></div>
+          <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">كم المدفوع</div><div class="field-desc">ما دفعه العميل للاستهلاك — الافتراضي: <strong>0</strong></div></div>
+          <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">الربح / الخسارة</div><div class="field-desc">⚙️ تلقائي: المدفوع - عليها</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ملاحظات</div><div class="field-desc">اختياري</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-scrap">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">مخزن الخردة <span class="badge badge-gray">warehouse_scrap</span></div>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ID</div><div class="field-desc">رقم تسلسلي</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--orange)"></div><div class="field-name">طريقة الشراء</div><div class="field-desc"><span class="badge badge-blue">بالوحدة</span> <span class="badge badge-orange">بالكيلو</span></div></div>
+          <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">اسم البطارية</div><div class="field-desc">إذا بالوحدة فقط</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">الطراز</div><div class="field-desc">اختياري (بالوحدة)</div></div>
+        </div>
+        <div>
+          <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">الوزن بالكيلو</div><div class="field-desc">إجمالي الوزن (وزن وحدة × كمية بالوحدة)</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">عدد الوحدات</div><div class="field-desc">إذا بالوحدة فقط</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">سعر الكيلو</div><div class="field-desc">⚙️ من الإعدادات المركزية</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ الإدخال</div><div class="field-desc">تاريخ استلام الخردة</div></div>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-top:1rem">
+        <span>💡</span>
+        <div><strong>بالكيلو:</strong> وزن + سعر فقط | <strong>بالوحدة:</strong> اسم + طراز + وزن وحدة + كمية + سعر كيلو → الإجمالي تلقائي</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-branches">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">جدول الفروع <span class="badge badge-teal">branches</span></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">اسم الفرع</div><div class="field-desc">مثال: المحل الرئيسي، العربية 1، العربية 2</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">نوع الفرع</div><div class="field-desc"><span class="badge badge-blue">store</span> <span class="badge badge-green">mobile</span> <span class="badge badge-gray">warehouse</span></div></div>
+      <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">اسم المندوب</div><div class="field-desc">Foreign Key → users (role = representative)</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text2)"></div><div class="field-name">رقم التلفون</div><div class="field-desc">اختياري</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ الافتتاح</div><div class="field-desc">Date Picker</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ملاحظة</div><div class="field-desc">اختياري</div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-expenses">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">جدول المصاريف <span class="badge badge-red">expenses</span></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ID</div><div class="field-desc">رقم تسلسلي</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">اسم المصروف</div><div class="field-desc">مثال: راتب أحمد، ديزل عربية، كهرباء</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--red)"></div><div class="field-name">التكلفة</div><div class="field-desc">المبلغ المدفوع</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">تاريخ المصروف</div><div class="field-desc">يُستخدم لفلترة مصاريف الشهر أو فترة محددة</div></div>
+      <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">ملاحظات</div><div class="field-desc">اختياري</div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="db-tab-orders">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:1rem;font-size:15px">جدول الطلبات <span class="badge badge-green">orders</span></div>
+      <div class="alert alert-info"><span>💡</span> العملاء الدائمون لهم سجل كامل بما لهم وما عليهم + تتبع المدفوعات المؤجلة</div>
+      <div class="grid grid-2">
+        <div>
+          <div class="field"><div class="field-dot" style="background:var(--text3)"></div><div class="field-name">رقم الطلب</div><div class="field-desc">⚙️ تلقائي</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--orange)"></div><div class="field-name">العميل</div><div class="field-desc">Dropdown دائمين أو إدخال يدوي (طياري)</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">نوع العميل</div><div class="field-desc"><span class="badge badge-blue">دائم</span> <span class="badge badge-gray">طياري</span></div></div>
+          <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">مكان البيع</div><div class="field-desc">المخزن الرئيسي أو أحد الفروع</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--accent)"></div><div class="field-name">الحالة</div><div class="field-desc"><span class="badge badge-orange">pending</span> <span class="badge badge-blue">confirmed</span> <span class="badge badge-green">delivered</span> <span class="badge badge-red">cancelled</span></div></div>
+        </div>
+        <div>
+          <div class="field"><div class="field-dot" style="background:var(--green)"></div><div class="field-name">إجمالي البيع</div><div class="field-desc">قيمة الطلب الإجمالية</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--red)"></div><div class="field-name">المدفوع</div><div class="field-desc">ما دفعه العميل</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--orange)"></div><div class="field-name">المتبقي</div><div class="field-desc">⚙️ تلقائي: الإجمالي - المدفوع</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--purple)"></div><div class="field-name">المندوب</div><div class="field-desc">Foreign Key → users</div></div>
+          <div class="field"><div class="field-dot" style="background:var(--teal)"></div><div class="field-name">التاريخ</div><div class="field-desc">تاريخ الطلب</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== ROLES ======================== -->
+<div class="page" id="page-roles">
+  <div class="page-header">
+    <div><div class="page-title">👥 الأدوار والصلاحيات</div><div class="page-subtitle">ما يمكن لكل دور رؤيته والقيام به</div></div>
+  </div>
+  <div class="grid grid-2" style="margin-bottom:1.5rem">
+    <div class="card" style="border-color:rgba(244,93,93,.3)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:1.5rem">👑</span>
+        <div><div style="font-weight:700">المدير — Admin</div><div style="font-size:12px;color:var(--text3)">صلاحيات كاملة بلا قيود</div></div>
+        <span class="badge badge-red" style="margin-right:auto">admin</span>
+      </div>
+      <div style="color:var(--text2);font-size:13px;line-height:2">
+        ✅ لوحة التحكم الكاملة<br>
+        ✅ إدارة المخازن الثلاثة<br>
+        ✅ إنشاء وإدارة الفروع<br>
+        ✅ التقارير المالية الكاملة<br>
+        ✅ إدارة المستخدمين<br>
+        ✅ الإعدادات والنسخ الاحتياطي<br>
+        ✅ عرض سعر التكلفة (بكلمة مرور)<br>
+        ✅ سجل النشاط الكامل
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(79,142,247,.3)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:1.5rem">💼</span>
+        <div><div style="font-weight:700">المحاسب — Accountant</div><div style="font-size:12px;color:var(--text3)">صلاحيات مالية وإدارية</div></div>
+        <span class="badge badge-blue" style="margin-right:auto">accountant</span>
+      </div>
+      <div style="color:var(--text2);font-size:13px;line-height:2">
+        ✅ لوحة التحكم<br>
+        ✅ المخازن والطلبات<br>
+        ✅ التقارير المالية<br>
+        ✅ إدارة المصاريف<br>
+        ✅ إنشاء فروع فرعية<br>
+        ✅ عرض سعر التكلفة (بكلمة مرور)<br>
+        ❌ إدارة المستخدمين<br>
+        ❌ الإعدادات الأساسية
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(62,207,142,.3)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:1.5rem">🚗</span>
+        <div><div style="font-weight:700">المندوب — Representative</div><div style="font-size:12px;color:var(--text3)">فرعه فقط</div></div>
+        <span class="badge badge-green" style="margin-right:auto">representative</span>
+      </div>
+      <div style="color:var(--text2);font-size:13px;line-height:2">
+        ✅ صفحة الفرع الخاص به<br>
+        ✅ مخزون فرعه<br>
+        ✅ إضافة طلبات جديدة<br>
+        ✅ عرض مبيعاته<br>
+        ❌ المخزن الرئيسي<br>
+        ❌ التقارير المالية<br>
+        ❌ إدارة العملاء<br>
+        ❌ سعر التكلفة
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,66,.3)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:1.5rem">👤</span>
+        <div><div style="font-weight:700">العميل — Customer</div><div style="font-size:12px;color:var(--text3)">قراءة فقط</div></div>
+        <span class="badge badge-orange" style="margin-right:auto">customer</span>
+      </div>
+      <div style="color:var(--text2);font-size:13px;line-height:2">
+        ✅ عرض طلباته فقط<br>
+        ✅ حالة كل طلب<br>
+        ✅ إجمالي مشترياته<br>
+        ❌ أي إجراء آخر<br>
+        ❌ أسعار التكلفة<br>
+        ❌ بيانات عملاء آخرين<br>
+        ❌ المخازن والتقارير
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot" style="background:var(--orange)"></div> التوجيه بعد الدخول</div>
+  <div class="flow">
+    <div class="flow-step" style="background:rgba(79,142,247,.1);border-color:rgba(79,142,247,.3)">تسجيل دخول</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">التحقق من الدور</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step" style="background:rgba(244,93,93,.1);border-color:rgba(244,93,93,.3)">Admin/Accountant → Dashboard</div>
+    <div style="width:100%;height:0"></div>
+    <div style="width:130px;opacity:0"></div>
+    <div class="flow-arrow" style="opacity:0">→</div>
+    <div class="flow-step" style="background:rgba(62,207,142,.1);border-color:rgba(62,207,142,.3)">Representative → صفحة فرعه</div>
+    <div style="width:100%;height:0"></div>
+    <div style="width:130px;opacity:0"></div>
+    <div class="flow-arrow" style="opacity:0">→</div>
+    <div class="flow-step" style="background:rgba(245,158,66,.1);border-color:rgba(245,158,66,.3)">Customer → صفحة طلباته</div>
+  </div>
+</div>
+
+<!-- ======================== LOGIN ======================== -->
+<div class="page" id="page-login">
+  <div class="page-header"><div><div class="page-title">🔐 صفحة تسجيل الدخول</div></div></div>
+  <div class="grid grid-2">
+    <div>
+      <div class="section-title"><div class="dot"></div> العناصر والميزات</div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)"><span>📱 حقول الدخول</span><span class="acc-icon">›</span></div>
+        <div class="acc-body">رقم التليفون أو اسم المستخدم + كلمة المرور مع أيقونة إظهار/إخفاء</div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)"><span>🔁 تذكرني</span><span class="acc-icon">›</span></div>
+        <div class="acc-body">يبقى المستخدم مسجلاً 5 أيام — البيانات تُحفظ في الكوكيز</div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)"><span>🚫 حساب معطل</span><span class="acc-icon">›</span></div>
+        <div class="acc-body">تظهر رسالة توضيحية واضحة عند محاولة دخول حساب inactive</div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(this)"><span>🎯 توجيه تلقائي</span><span class="acc-icon">›</span></div>
+        <div class="acc-body">بعد الدخول الناجح يتم التوجيه حسب الدور تلقائياً</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-title"><div class="dot"></div> نموذج تسجيل الدخول</div>
+      <div class="modal-overlay" style="border:1px solid var(--border);border-radius:var(--radius)">
+        <div class="modal-box" style="max-width:100%">
+          <div style="text-align:center;margin-bottom:1.2rem">
+            <div style="font-size:2rem;margin-bottom:6px">🔋</div>
+            <div style="font-weight:700;font-size:16px">نظام موزّع البطاريات</div>
+            <div style="font-size:12px;color:var(--text3)">سجّل دخولك للمتابعة</div>
+          </div>
+          <div class="form-group"><label class="form-label">رقم التليفون / اسم المستخدم</label><input class="form-input" placeholder="01xxxxxxxxx"></div>
+          <div class="form-group"><label class="form-label">كلمة المرور</label><input class="form-input" type="password" placeholder="••••••••"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;font-size:13px;color:var(--text2)">
+            <input type="checkbox" id="rem"> <label for="rem">تذكرني لمدة 5 أيام</label>
+          </div>
+          <button class="form-btn btn-primary" style="width:100%">تسجيل الدخول</button>
+          <div class="alert alert-warn" style="margin-top:12px;display:none" id="inactive-msg"><span>⚠️</span> هذا الحساب معطّل. تواصل مع المدير.</div>
+          <div style="text-align:center;margin-top:10px"><a href="#" style="font-size:12px;color:var(--text3)">نسيت كلمة المرور؟</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DASHBOARD ======================== -->
+<div class="page" id="page-dashboard">
+  <div class="page-header"><div><div class="page-title">📊 لوحة التحكم</div><div class="page-subtitle">نظرة عامة على النظام</div></div></div>
+
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi" style="border-color:rgba(79,142,247,.3)">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-label">المخزون</div>
+      <div class="kpi-value" style="color:var(--accent)">245</div>
+      <div class="kpi-sub">وحدة متوفرة</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(62,207,142,.3)">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">مبيعات اليوم</div>
+      <div class="kpi-value" style="color:var(--green)">12,500</div>
+      <div class="kpi-sub">↑ 8% عن أمس</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(245,158,66,.3)">
+      <div class="kpi-icon">🔄</div>
+      <div class="kpi-label">المرتجعات</div>
+      <div class="kpi-value" style="color:var(--orange)">3</div>
+      <div class="kpi-sub">قيد المراجعة</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(167,139,250,.3)">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-label">ربح الشهر</div>
+      <div class="kpi-value" style="color:var(--purple)">8,200</div>
+      <div class="kpi-sub">هامش 18%</div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot" style="background:var(--teal)"></div> الرسوم البيانية</div>
+  <div class="grid grid-2" style="margin-bottom:1.5rem">
+    <div class="card">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">📈 مبيعات آخر 12 شهر</div>
+      <div class="chart-bar">
+        <div class="bar" style="height:35%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:40%"></div>
+        <div class="bar" style="height:70%"></div>
+        <div class="bar" style="height:45%"></div>
+        <div class="bar" style="height:80%"></div>
+        <div class="bar" style="height:60%"></div>
+        <div class="bar" style="height:90%"></div>
+        <div class="bar" style="height:65%"></div>
+        <div class="bar" style="height:100%;opacity:1"></div>
+        <div class="bar" style="height:75%"></div>
+        <div class="bar" style="height:85%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);padding:4px 8px 0">
+        <span>يناير</span><span>أبريل</span><span>يوليو</span><span>أكتوبر</span>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">🥧 توزيع المخزون</div>
+      <div style="display:flex;gap:12px;align-items:center;padding:1rem 0">
+        <div style="width:90px;height:90px;border-radius:50%;background:conic-gradient(var(--accent) 0 55%,var(--orange) 55% 75%,var(--red) 75% 90%,var(--text3) 90% 100%);flex-shrink:0"></div>
+        <div style="font-size:12px;line-height:2.2">
+          <div><span style="color:var(--accent)">■</span> مخزن رئيسي 55%</div>
+          <div><span style="color:var(--orange)">■</span> فروع 20%</div>
+          <div><span style="color:var(--red)">■</span> مرتجع 15%</div>
+          <div><span style="color:var(--text3)">■</span> خردة 10%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot" style="background:var(--orange)"></div> جداول سريعة</div>
+  <div class="grid grid-2">
+    <div class="card" style="padding:0">
+      <div style="padding:12px 14px;font-weight:700;font-size:13px;border-bottom:1px solid var(--border)">⚠️ مخزون منخفض</div>
+      <div class="table-wrap" style="border:none;border-radius:0">
+        <table>
+          <thead><tr><th>المنتج</th><th>الكمية</th><th>الحد</th></tr></thead>
+          <tbody>
+            <tr><td>70 نسر</td><td><span class="badge badge-red">2</span></td><td>5</td></tr>
+            <tr><td>40 أنكر</td><td><span class="badge badge-orange">4</span></td><td>10</td></tr>
+            <tr><td>60 فارس</td><td><span class="badge badge-red">1</span></td><td>5</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="padding:0">
+      <div style="padding:12px 14px;font-weight:700;font-size:13px;border-bottom:1px solid var(--border)">🕐 آخر الطلبات</div>
+      <div class="table-wrap" style="border:none;border-radius:0">
+        <table>
+          <thead><tr><th>العميل</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+          <tbody>
+            <tr><td>أبو محمد</td><td>5,000</td><td><span class="badge badge-green">مكتمل</span></td></tr>
+            <tr><td>محل النور</td><td>12,000</td><td><span class="badge badge-orange">قيد التجهيز</span></td></tr>
+            <tr><td>علي كريم</td><td>3,500</td><td><span class="badge badge-blue">مؤكد</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DAILY ======================== -->
+<div class="page" id="page-daily">
+  <div class="page-header"><div><div class="page-title">📅 اليومية — تسجيل البيع اليومي</div><div class="page-subtitle">أهم صفحة في النظام</div></div></div>
+
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi"><div class="kpi-label">طلبات اليوم</div><div class="kpi-value" style="color:var(--accent)">14</div></div>
+    <div class="kpi"><div class="kpi-label">إجمالي البيع</div><div class="kpi-value" style="color:var(--green)">45,200</div></div>
+    <div class="kpi"><div class="kpi-label">الربح اليومي</div><div class="kpi-value" style="color:var(--purple)">7,800</div></div>
+    <div class="kpi"><div class="kpi-label">هامش الربح</div><div class="kpi-value" style="color:var(--teal)">17%</div></div>
+  </div>
+
+  <div class="grid grid-2" style="gap:1.5rem">
+    <div>
+      <div class="section-title"><div class="dot"></div> نموذج إضافة طلب</div>
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">اسم البطارية <span class="field-req">*</span></label>
+          <select class="form-input form-select">
+            <option>70 نسر — اختر من المخزن</option>
+            <option>40 أنكر</option>
+            <option>60 فارس</option>
+            <option>+ إضافة اسم جديد...</option>
+          </select>
+        </div>
+        <div class="grid grid-2" style="gap:8px">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px">
+            <div style="color:var(--text3);margin-bottom:2px">سعر البيع المسجّل</div>
+            <div style="color:var(--green);font-weight:700">1,200 ج</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px">
+            <div style="color:var(--text3);margin-bottom:2px">سعر التكلفة</div>
+            <div class="secret-field" style="display:inline-flex;padding:2px 8px" onclick="alert('أدخل كلمة المرور')"><span class="stars">●●●</span></div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:10px">
+          <label class="form-label">مكان البيع</label>
+          <select class="form-input form-select">
+            <option>المخزن الرئيسي</option>
+            <option>المحل</option>
+            <option>العربية 1</option>
+            <option>العربية 2</option>
+          </select>
+          <div class="alert alert-warn" style="margin-top:6px;padding:6px 10px;font-size:12px"><span>⚡</span> البضاعة تُخصم تلقائياً من المكان المختار</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">اسم العميل</label>
+          <select class="form-input form-select">
+            <option>عميل طياري</option>
+            <option>أبو محمد (دائم)</option>
+            <option>محل النور (دائم)</option>
+            <option>+ إضافة عميل جديد...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">سعر البيع الفعلي <span style="font-size:11px;color:var(--text3)">(اتركه فارغاً لاستخدام المسجّل)</span></label>
+          <input class="form-input" placeholder="أدخل سعراً مختلفاً لو أردت">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ملاحظة</label>
+          <input class="form-input" placeholder="اختياري">
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--text3)">سعر البيع:</span><span style="color:var(--green)">1,200 ج</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--text3)">سعر التكلفة:</span><div class="secret-field" style="padding:2px 8px"><span class="stars">●●●</span></div></div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:6px;margin-top:6px"><span style="font-weight:700">المكسب:</span><div class="secret-field" style="padding:2px 8px"><span class="stars">●●●</span></div></div>
+        </div>
+        <button class="form-btn btn-success" style="width:100%">✅ حفظ الطلب</button>
+      </div>
+    </div>
+    <div>
+      <div class="section-title"><div class="dot"></div> جدول طلبات اليوم</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>البطارية</th><th>العميل</th><th>المكان</th><th>سعر البيع</th><th>المكسب</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td><td>70 نسر</td><td>أبو محمد</td><td>المخزن</td><td style="color:var(--green)">5,000</td>
+              <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+            </tr>
+            <tr>
+              <td>2</td><td>40 أنكر</td><td>طياري</td><td>المحل</td><td style="color:var(--green)">1,000</td>
+              <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+            </tr>
+            <tr>
+              <td>3</td><td>60 فارس</td><td>محل النور</td><td>العربية 1</td><td style="color:var(--green)">4,000</td>
+              <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-info" style="margin-top:1rem"><span>🔒</span> عمود المكسب وسعر التكلفة مخفيّان — اضغط لإدخال كلمة المرور لعرضهما</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== WAREHOUSE NEW ======================== -->
+<div class="page" id="page-warehouse-new">
+  <div class="page-header"><div><div class="page-title">📦 مخزن الجديد</div><div class="page-subtitle">المخزن الرئيسي للبطاريات الجديدة</div></div></div>
+
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi"><div class="kpi-label">إجمالي الكمية</div><div class="kpi-value" style="color:var(--accent)">380</div><div class="kpi-sub">وحدة</div></div>
+    <div class="kpi"><div class="kpi-label">إجمالي التكلفة</div>
+      <div class="kpi-value"><div class="secret-field" onclick="alert('كلمة المرور لعرض التكلفة')"><span class="stars">●●●●●</span></div></div>
+    </div>
+    <div class="kpi"><div class="kpi-label">إجمالي البيع المتوقع</div><div class="kpi-value" style="color:var(--green)">182,000</div></div>
+    <div class="kpi"><div class="kpi-label">الربح المتوقع</div>
+      <div class="kpi-value"><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●●●</span></div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+    <select class="form-input" style="width:auto;min-width:140px"><option>الشركة: الكل</option></select>
+    <select class="form-input" style="width:auto;min-width:140px"><option>الطراز: الكل</option></select>
+    <input class="form-input" placeholder="🔍 بحث بالاسم..." style="width:auto;flex:1;min-width:180px">
+    <button class="form-btn btn-primary" onclick="showModal('modal-add-stock')">➕ إضافة بضاعة</button>
+    <button class="form-btn btn-secondary">📤 تصدير</button>
+    <button class="form-btn btn-secondary">🖨️ طباعة الجرد</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>اسم البطارية</th><th>الشركة</th><th>الكمية</th><th>سعر التكلفة/وحدة</th><th>سعر البيع/وحدة</th><th>توتل التكلفة</th><th>توتل البيع</th><th>تاريخ الوصول</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>70 نسر</td><td>نسر</td><td>45</td>
+          <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+          <td style="color:var(--green)">5,000</td>
+          <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+          <td style="color:var(--green)">225,000</td>
+          <td>2026-01-15</td>
+        </tr>
+        <tr>
+          <td>40 أنكر</td><td>أنكر</td><td>80</td>
+          <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+          <td style="color:var(--green)">1,000</td>
+          <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+          <td style="color:var(--green)">80,000</td>
+          <td>2026-01-20</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODAL ADD STOCK -->
+  <div class="modal-overlay" id="modal-add-stock" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(13,15,20,.9);justify-content:center;align-items:center">
+    <div class="modal-box" style="max-width:400px;width:90%">
+      <div class="modal-title">➕ إضافة بضاعة للمخزن</div>
+      <div class="form-group"><label class="form-label">المنتج</label><select class="form-input form-select"><option>70 نسر</option><option>40 أنكر</option></select></div>
+      <div class="form-group"><label class="form-label">الكمية</label><input class="form-input" type="number" placeholder="0"></div>
+      <div class="form-group"><label class="form-label">رقم فاتورة الشراء</label><input class="form-input" placeholder="INV-001"></div>
+      <div class="form-group"><label class="form-label">تاريخ الوصول</label><input class="form-input" type="date"></div>
+      <div class="form-group"><label class="form-label">ملاحظات</label><textarea class="form-input" rows="2" placeholder="اختياري"></textarea></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="form-btn btn-secondary" onclick="hideModal('modal-add-stock')">إلغاء</button>
+        <button class="form-btn btn-primary">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== WAREHOUSE RETURN ======================== -->
+<div class="page" id="page-warehouse-return">
+  <div class="page-header"><div><div class="page-title">🔄 مخزن المرتجع</div></div></div>
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi"><div class="kpi-label">إجمالي المرتجعات</div><div class="kpi-value">28</div></div>
+    <div class="kpi"><div class="kpi-label">قيد المراجعة</div><div class="kpi-value" style="color:var(--red)">5</div></div>
+    <div class="kpi"><div class="kpi-label">تم الاستبدال</div><div class="kpi-value" style="color:var(--green)">20</div></div>
+    <div class="kpi"><div class="kpi-label">إجمالي الاستهلاك المحصّل</div><div class="kpi-value" style="color:var(--orange)">4,200</div></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+    <select class="form-input" style="width:auto;min-width:140px"><option>الحالة: الكل</option><option>pending</option><option>approved</option><option>replaced</option><option>rejected</option></select>
+    <select class="form-input" style="width:auto;min-width:140px"><option>الشركة: الكل</option></select>
+    <input class="form-input" placeholder="🔍 بحث بالكود الداخلي..." style="flex:1;min-width:180px">
+    <button class="form-btn btn-orange" onclick="showModal('modal-receive-return')">📥 استلام مرتجع</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>الكود الداخلي</th><th>البطارية</th><th>العميل</th><th>الشركة</th><th>تاريخ الاستلام</th><th>كم عليها</th><th>كم المدفوع</th><th>الربح/خسارة</th><th>الحالة</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-family:monospace;font-size:12px">010226-001</td>
+          <td>70 نسر</td><td>أبو محمد</td><td>نسر</td><td>2026-02-01</td>
+          <td>500</td><td>300</td><td style="color:var(--red)">-200</td>
+          <td><span class="badge badge-orange">pending</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:12px">010226-002</td>
+          <td>40 أنكر</td><td>محل النور</td><td>أنكر</td><td>2026-02-02</td>
+          <td>200</td><td>250</td><td style="color:var(--green)">+50</td>
+          <td><span class="badge badge-green">replaced</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" id="modal-receive-return" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(13,15,20,.9);justify-content:center;align-items:center">
+    <div class="modal-box" style="max-width:420px;width:90%">
+      <div class="modal-title">📥 استلام مرتجع</div>
+      <div class="alert alert-info"><span>ℹ️</span> الكود الداخلي يُنشأ تلقائياً (DDMMYYYY + رقم)</div>
+      <div class="form-group"><label class="form-label">العميل</label><select class="form-input form-select"><option>اختر عميلاً أو أضف اسماً</option></select></div>
+      <div class="form-group"><label class="form-label">اسم البطارية</label><input class="form-input" placeholder="اسم البطارية المرتجعة"></div>
+      <div class="form-group"><label class="form-label">الشركة الموردة (للضمان)</label><select class="form-input form-select"><option>اختر شركة</option></select></div>
+      <div class="form-group"><label class="form-label">كود الشركة</label><input class="form-input" placeholder="كود الضمان من الشركة"></div>
+      <div class="form-group"><label class="form-label">تاريخ الاستلام</label><input class="form-input" type="date"></div>
+      <div class="form-group"><label class="form-label">ملاحظات</label><textarea class="form-input" rows="2"></textarea></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="form-btn btn-secondary" onclick="hideModal('modal-receive-return')">إلغاء</button>
+        <button class="form-btn btn-orange">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== WAREHOUSE SCRAP ======================== -->
+<div class="page" id="page-warehouse-scrap">
+  <div class="page-header"><div><div class="page-title">♻️ مخزن الخردة</div></div></div>
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi"><div class="kpi-label">إجمالي الوزن</div><div class="kpi-value">1,240 <span style="font-size:1rem">كجم</span></div></div>
+    <div class="kpi"><div class="kpi-label">إجمالي التكلفة</div><div class="kpi-value" style="color:var(--green)">6,200</div></div>
+    <div class="kpi"><div class="kpi-label">سعر الكيلو الحالي</div><div class="kpi-value" style="color:var(--orange)">5 ج</div></div>
+    <div class="kpi"><div class="kpi-label">العمليات هذا الشهر</div><div class="kpi-value" style="color:var(--teal)">12</div></div>
+  </div>
+
+  <div class="section-title"><div class="dot"></div> نموذج إضافة خردة</div>
+  <div class="card" style="max-width:500px">
+    <div style="display:flex;gap:12px;margin-bottom:1rem">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;font-weight:600">
+        <input type="radio" name="scrap-type" value="kilo" checked onchange="toggleScrapType(this.value)"> بالكيلو
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;font-weight:600">
+        <input type="radio" name="scrap-type" value="unit" onchange="toggleScrapType(this.value)"> بالوحدة
+      </label>
+    </div>
+    <div id="scrap-unit-fields" style="display:none">
+      <div class="form-group"><label class="form-label">اسم البطارية</label><input class="form-input" placeholder="مثال: 60 فارس"></div>
+      <div class="form-group"><label class="form-label">الطراز (اختياري)</label><input class="form-input"></div>
+      <div class="form-group"><label class="form-label">وزن الوحدة (كجم)</label><input class="form-input" type="number" placeholder="0.0" oninput="calcScrap()"></div>
+      <div class="form-group"><label class="form-label">عدد الوحدات</label><input class="form-input" type="number" placeholder="0" id="scrap-qty" oninput="calcScrap()"></div>
+    </div>
+    <div class="form-group"><label class="form-label">الوزن الإجمالي (كجم)</label><input class="form-input" type="number" id="scrap-weight" placeholder="0.0" oninput="calcScrap()"></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">سعر الكيلو:</span><span style="color:var(--orange)">5 ج</span></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-weight:700"><span>التكلفة الإجمالية:</span><span style="color:var(--green)" id="scrap-total">0 ج</span></div>
+    </div>
+    <button class="form-btn btn-success" style="width:100%">✅ حفظ</button>
+  </div>
+</div>
+
+<!-- ======================== BRANCHES ======================== -->
+<div class="page" id="page-branches">
+  <div class="page-header">
+    <div><div class="page-title">🏪 الفروع والعربيات</div><div class="page-subtitle">المخازن الفرعية والمتحركة</div></div>
+    <button class="form-btn btn-primary">➕ إضافة فرع</button>
+  </div>
+  <div class="alert alert-info" style="margin-bottom:1rem"><span>💡</span> كل المخازن في نفس المكان — المخزن الرئيسي يخدم المحل والعربيات. البضاعة تُنقل بين المخزن الرئيسي والفروع.</div>
+  <div class="grid grid-3">
+    <div class="card" style="border-color:rgba(79,142,247,.3)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-weight:700;font-size:15px">🏪 المحل الرئيسي</div>
+        <span class="badge badge-green">نشط</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:4px">👤 المندوب: أحمد</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">📞 01xxxxxxxxx</div>
+      <div class="grid grid-2" style="gap:6px;margin-bottom:12px">
+        <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:8px;text-align:center;font-size:12px">
+          <div style="font-weight:700;color:var(--accent)">45</div><div style="color:var(--text3)">منتج</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:8px;text-align:center;font-size:12px">
+          <div style="font-weight:700;color:var(--green)">92,000</div><div style="color:var(--text3)">قيمة البيع</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="form-btn btn-secondary" style="font-size:12px;padding:6px 10px">👁️ عرض</button>
+        <button class="form-btn btn-primary" style="font-size:12px;padding:6px 10px">➕ نقل</button>
+        <button class="form-btn btn-secondary" style="font-size:12px;padding:6px 10px">✏️</button>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(62,207,142,.3)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-weight:700;font-size:15px">🚗 العربية 1</div>
+        <span class="badge badge-green">نشط</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:4px">👤 المندوب: محمود</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">📞 01xxxxxxxxx</div>
+      <div class="grid grid-2" style="gap:6px;margin-bottom:12px">
+        <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:8px;text-align:center;font-size:12px">
+          <div style="font-weight:700;color:var(--accent)">20</div><div style="color:var(--text3)">منتج</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:8px;text-align:center;font-size:12px">
+          <div style="font-weight:700;color:var(--green)">35,000</div><div style="color:var(--text3)">قيمة البيع</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="form-btn btn-secondary" style="font-size:12px;padding:6px 10px">👁️ عرض</button>
+        <button class="form-btn btn-primary" style="font-size:12px;padding:6px 10px">➕ نقل</button>
+        <button class="form-btn btn-secondary" style="font-size:12px;padding:6px 10px">✏️</button>
+      </div>
+    </div>
+    <div class="card" style="border:1px dashed var(--border);opacity:.6;cursor:pointer" onclick="showModal('modal-add-branch')">
+      <div style="text-align:center;padding:2rem;color:var(--text3)">
+        <div style="font-size:2rem;margin-bottom:8px">➕</div>
+        <div style="font-weight:600">إضافة فرع جديد</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-add-branch" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(13,15,20,.9);justify-content:center;align-items:center">
+    <div class="modal-box" style="max-width:380px;width:90%">
+      <div class="modal-title">➕ إضافة فرع جديد</div>
+      <div class="form-group"><label class="form-label">اسم الفرع</label><input class="form-input" placeholder="مثال: العربية 3"></div>
+      <div class="form-group"><label class="form-label">نوع الفرع</label><select class="form-input form-select"><option>محل (store)</option><option>عربية (mobile)</option><option>مخزن (warehouse)</option></select></div>
+      <div class="form-group"><label class="form-label">المندوب المسؤول</label><select class="form-input form-select"><option>أحمد</option><option>محمود</option></select></div>
+      <div class="form-group"><label class="form-label">رقم التلفون</label><input class="form-input" placeholder="01xxxxxxxxx"></div>
+      <div class="form-group"><label class="form-label">تاريخ الافتتاح</label><input class="form-input" type="date"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="form-btn btn-secondary" onclick="hideModal('modal-add-branch')">إلغاء</button>
+        <button class="form-btn btn-primary">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== PRODUCTS ======================== -->
+<div class="page" id="page-products">
+  <div class="page-header">
+    <div><div class="page-title">🔋 المنتجات</div></div>
+    <button class="form-btn btn-primary">➕ إضافة منتج</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>اسم البطارية</th><th>الشركة</th><th>الطراز</th><th>شهر الإنتاج</th><th>سعر التكلفة</th><th>سعر البيع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>70 نسر</td><td>نسر</td><td>MF-70</td><td>01/2025</td>
+          <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+          <td style="color:var(--green)">5,000</td>
+          <td><span class="badge badge-green">active</span></td>
+          <td><button class="form-btn btn-secondary" style="font-size:12px;padding:4px 10px">✏️</button></td>
+        </tr>
+        <tr>
+          <td>40 أنكر</td><td>أنكر</td><td>—</td><td>03/2025</td>
+          <td><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●</span></div></td>
+          <td style="color:var(--green)">1,000</td>
+          <td><span class="badge badge-green">active</span></td>
+          <td><button class="form-btn btn-secondary" style="font-size:12px;padding:4px 10px">✏️</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======================== COMPANIES ======================== -->
+<div class="page" id="page-companies">
+  <div class="page-header"><div><div class="page-title">🏭 الشركات الموردة</div></div><button class="form-btn btn-primary">➕ إضافة شركة</button></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>اسم الشركة</th><th>رقم التلفون</th><th>ملاحظة</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>نسر للبطاريات</td><td>02-xxxxxxxx</td><td>—</td><td><span class="badge badge-green">active</span></td><td><button class="form-btn btn-secondary" style="font-size:12px;padding:4px 10px">✏️</button></td></tr>
+        <tr><td>2</td><td>أنكر</td><td>—</td><td>ضمان سنة</td><td><span class="badge badge-green">active</span></td><td><button class="form-btn btn-secondary" style="font-size:12px;padding:4px 10px">✏️</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======================== CUSTOMERS ======================== -->
+<div class="page" id="page-customers">
+  <div class="page-header"><div><div class="page-title">👤 إدارة العملاء</div><div class="page-subtitle">عملاء دائمون + طياري</div></div><button class="form-btn btn-primary">➕ إضافة عميل</button></div>
+
+  <div class="alert alert-info" style="margin-bottom:1rem">
+    <span>💡</span>
+    <div><strong>عميل دائم:</strong> تاجر أو موزّع — له سجل كامل بما له وما عليه + صفحة لعرض طلباته (قراءة فقط) | <strong>عميل طياري:</strong> مشتري عارض — لا يحتاج سجلاً</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>الاسم</th><th>التلفون</th><th>النوع</th><th>عدد الطلبات</th><th>إجمالي المشتريات</th><th>المتبقي (له/عليه)</th><th>إجراءات</th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600">أبو محمد</td><td>01xxxxxxxx</td>
+          <td><span class="badge badge-blue">دائم</span></td>
+          <td>23</td><td style="color:var(--green)">115,000</td>
+          <td style="color:var(--red)">-12,000 (عليه)</td>
+          <td><button class="form-btn btn-secondary" style="font-size:12px;padding:4px 10px">📋 سجل</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600">محل النور</td><td>01xxxxxxxx</td>
+          <td><span class="badge badge-blue">دائم</span></td>
+          <td>8</td><td style="color:var(--green)">40,000</td>
+          <td style="color:var(--green)">+500 (له)</td>
+          <td><button class="form-btn btn-secondary" style="font-size:12px;padding:4px 10px">📋 سجل</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="margin-top:1.5rem"><div class="dot" style="background:var(--orange)"></div> سجل العميل الدائم — أبو محمد</div>
+  <div class="card">
+    <div class="tabs" id="customer-tabs">
+      <div class="tab active" onclick="switchTab('customer','orders')">🛒 الطلبات</div>
+      <div class="tab" onclick="switchTab('customer','payments')">💰 المدفوعات</div>
+      <div class="tab" onclick="switchTab('customer','returns')">🔄 المرتجعات</div>
+      <div class="tab" onclick="switchTab('customer','balance')">⚖️ الحساب</div>
+    </div>
+    <div class="tab-panel active" id="customer-tab-orders">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>التاريخ</th><th>البطارية</th><th>الكمية</th><th>السعر</th><th>المدفوع</th><th>المتبقي</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01-10</td><td>70 نسر</td><td>1</td><td>5,000</td><td>5,000</td><td style="color:var(--green)">0</td></tr>
+            <tr><td>2026-01-15</td><td>40 أنكر</td><td>3</td><td>3,000</td><td>0</td><td style="color:var(--red)">3,000</td></tr>
+            <tr><td>2026-01-20</td><td>60 فارس</td><td>2</td><td>8,000</td><td>4,000</td><td style="color:var(--red)">4,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-panel" id="customer-tab-payments"><div class="alert alert-info"><span>💳</span> سجل كل المدفوعات وتواريخها</div></div>
+    <div class="tab-panel" id="customer-tab-returns"><div class="alert alert-orange" style="background:rgba(245,158,66,.1);border:1px solid rgba(245,158,66,.2);color:var(--orange);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;display:flex;gap:8px"><span>🔄</span> المرتجعات المرتبطة بهذا العميل</div></div>
+    <div class="tab-panel" id="customer-tab-balance">
+      <div class="grid grid-3" style="gap:10px">
+        <div class="kpi"><div class="kpi-label">إجمالي المشتريات</div><div class="kpi-value">16,000</div></div>
+        <div class="kpi"><div class="kpi-label">إجمالي المدفوع</div><div class="kpi-value" style="color:var(--green)">9,000</div></div>
+        <div class="kpi"><div class="kpi-label">المتبقي عليه</div><div class="kpi-value" style="color:var(--red)">7,000</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== ORDERS ======================== -->
+<div class="page" id="page-orders">
+  <div class="page-header"><div><div class="page-title">🛒 إدارة الطلبات</div></div><button class="form-btn btn-success">➕ طلب جديد</button></div>
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi"><div class="kpi-label">طلبات اليوم</div><div class="kpi-value" style="color:var(--accent)">14</div></div>
+    <div class="kpi"><div class="kpi-label">قيد التجهيز</div><div class="kpi-value" style="color:var(--orange)">3</div></div>
+    <div class="kpi"><div class="kpi-label">تم التسليم</div><div class="kpi-value" style="color:var(--green)">9</div></div>
+    <div class="kpi"><div class="kpi-label">ملغية</div><div class="kpi-value" style="color:var(--red)">2</div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+    <select class="form-input" style="width:auto"><option>الحالة: الكل</option><option>pending</option><option>confirmed</option><option>delivered</option><option>cancelled</option></select>
+    <select class="form-input" style="width:auto"><option>الفرع: الكل</option></select>
+    <select class="form-input" style="width:auto"><option>المندوب: الكل</option></select>
+    <input class="form-input" placeholder="🔍 رقم الطلب..." style="flex:1">
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>العميل</th><th>المنتجات</th><th>المبلغ</th><th>المدفوع</th><th>المتبقي</th><th>الفرع</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+      <tbody>
+        <tr><td>1001</td><td>أبو محمد</td><td>70 نسر × 2</td><td>10,000</td><td>10,000</td><td style="color:var(--green)">0</td><td>المحل</td><td><span class="badge badge-green">delivered</span></td><td>2026-02-01</td></tr>
+        <tr><td>1002</td><td>محل النور</td><td>40 أنكر × 5</td><td>5,000</td><td>2,000</td><td style="color:var(--red)">3,000</td><td>العربية 1</td><td><span class="badge badge-orange">pending</span></td><td>2026-02-02</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======================== EXPENSES ======================== -->
+<div class="page" id="page-expenses">
+  <div class="page-header"><div><div class="page-title">💸 المصاريف</div></div><button class="form-btn btn-danger">➕ إضافة مصروف</button></div>
+  <div class="grid grid-4" style="margin-bottom:1.5rem">
+    <div class="kpi"><div class="kpi-label">مصاريف اليوم</div><div class="kpi-value" style="color:var(--red)">850</div></div>
+    <div class="kpi"><div class="kpi-label">مصاريف الشهر</div><div class="kpi-value" style="color:var(--red)">12,400</div></div>
+    <div class="kpi"><div class="kpi-label">أكبر بند</div><div class="kpi-value" style="font-size:1rem;color:var(--orange)">رواتب</div></div>
+    <div class="kpi"><div class="kpi-label">مقارنة بالشهر السابق</div><div class="kpi-value" style="color:var(--red)">↑ 5%</div></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>اسم المصروف</th><th>التكلفة</th><th>التاريخ</th><th>ملاحظات</th></tr></thead>
+      <tbody>
+        <tr><td>راتب أحمد</td><td style="color:var(--red)">3,000</td><td>2026-02-01</td><td>راتب شهر يناير</td></tr>
+        <tr><td>ديزل العربية</td><td style="color:var(--red)">200</td><td>2026-02-03</td><td>—</td></tr>
+        <tr><td>كهرباء المخزن</td><td style="color:var(--red)">650</td><td>2026-02-05</td><td>فاتورة يناير</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======================== REPORTS ======================== -->
+<div class="page" id="page-reports">
+  <div class="page-header"><div><div class="page-title">📈 التقارير</div></div></div>
+  <div style="display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center">
+    <select class="form-input" style="width:auto;min-width:160px"><option>نوع التقرير: مبيعات</option><option>مخزون</option><option>مرتجعات</option><option>ربحية</option><option>مصاريف</option><option>مدفوعات</option></select>
+    <select class="form-input" style="width:auto"><option>الشهر الحالي</option><option>اليوم</option><option>الأسبوع</option><option>السنة</option><option>مخصص</option></select>
+    <select class="form-input" style="width:auto"><option>الفرع: الكل</option></select>
+    <select class="form-input" style="width:auto"><option>المندوب: الكل</option></select>
+    <button class="form-btn btn-primary">تطبيق</button>
+    <button class="form-btn btn-secondary">📤 Excel</button>
+    <button class="form-btn btn-secondary">📄 PDF</button>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:1rem">
+    <div class="kpi"><div class="kpi-label">إجمالي المبيعات</div><div class="kpi-value" style="color:var(--green)">182,500</div></div>
+    <div class="kpi"><div class="kpi-label">عدد الفواتير</div><div class="kpi-value" style="color:var(--accent)">48</div></div>
+    <div class="kpi"><div class="kpi-label">متوسط الفاتورة</div><div class="kpi-value" style="color:var(--teal)">3,802</div></div>
+    <div class="kpi"><div class="kpi-label">صافي الربح</div><div class="kpi-value"><div class="secret-field" onclick="alert('كلمة المرور')"><span class="stars">●●●●</span></div></div></div>
+  </div>
+
+  <div class="section-title"><div class="dot"></div> 6 أنواع تقارير</div>
+  <div class="grid grid-3" style="gap:8px">
+    <div class="card-sm"><div style="font-size:1.2rem;margin-bottom:6px">💰</div><div style="font-weight:700;font-size:13px">تقرير المبيعات</div><div style="font-size:12px;color:var(--text3);margin-top:4px">فواتير + مبيعات يومية + متوسطات</div></div>
+    <div class="card-sm"><div style="font-size:1.2rem;margin-bottom:6px">📦</div><div style="font-weight:700;font-size:13px">تقرير المخزون</div><div style="font-size:12px;color:var(--text3);margin-top:4px">قيم المخزون + حركة In/Out</div></div>
+    <div class="card-sm"><div style="font-size:1.2rem;margin-bottom:6px">🔄</div><div style="font-weight:700;font-size:13px">تقرير المرتجعات</div><div style="font-size:12px;color:var(--text3);margin-top:4px">عدد + نسبة + استهلاك محصّل</div></div>
+    <div class="card-sm"><div style="font-size:1.2rem;margin-bottom:6px">📊</div><div style="font-weight:700;font-size:13px">تقرير الربحية</div><div style="font-size:12px;color:var(--text3);margin-top:4px">إيرادات - تكاليف - مصاريف = ربح</div></div>
+    <div class="card-sm"><div style="font-size:1.2rem;margin-bottom:6px">💸</div><div style="font-weight:700;font-size:13px">تقرير المصاريف</div><div style="font-size:12px;color:var(--text3);margin-top:4px">توزيع حسب النوع + مقارنات</div></div>
+    <div class="card-sm"><div style="font-size:1.2rem;margin-bottom:6px">💳</div><div style="font-weight:700;font-size:13px">تقرير المدفوعات</div><div style="font-size:12px;color:var(--text3);margin-top:4px">مدفوعة + معلقة + متأخرات</div></div>
+  </div>
+</div>
+
+<!-- ======================== SETTINGS ======================== -->
+<div class="page" id="page-settings">
+  <div class="page-header"><div><div class="page-title">⚙️ الإعدادات</div></div></div>
+  <div style="display:flex;gap:1.5rem">
+    <div style="width:180px;flex-shrink:0">
+      <div class="acc-item open" style="margin-bottom:4px"><div class="acc-header" style="background:rgba(79,142,247,.1);color:var(--accent)" onclick="toggleAcc(this)"><span>⚙️ إعدادات عامة</span><span class="acc-icon">›</span></div><div class="acc-body" style="display:block;font-size:12px">اسم الشركة + رقم التلفون</div></div>
+      <div class="acc-item"><div class="acc-header" onclick="toggleAcc(this)"><span>📦 إعدادات المخزون</span><span class="acc-icon">›</span></div><div class="acc-body" style="font-size:12px">سعر الخردة للكيلو + حد المخزون المنخفض</div></div>
+      <div class="acc-item"><div class="acc-header" onclick="toggleAcc(this)"><span>👥 المستخدمون</span><span class="acc-icon">›</span></div><div class="acc-body" style="font-size:12px">إدارة المستخدمين والصلاحيات</div></div>
+      <div class="acc-item"><div class="acc-header" onclick="toggleAcc(this)"><span>💾 النسخ الاحتياطي</span><span class="acc-icon">›</span></div><div class="acc-body" style="font-size:12px">إنشاء + استعادة النسخ</div></div>
+      <div class="acc-item"><div class="acc-header" onclick="toggleAcc(this)"><span>🔔 الإشعارات</span><span class="acc-icon">›</span></div><div class="acc-body" style="font-size:12px">تفعيل/تعطيل إشعارات المخزون والطلبات</div></div>
+    </div>
+    <div style="flex:1">
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:1rem">⚙️ الإعدادات العامة</div>
+        <div class="form-group"><label class="form-label">اسم الشركة</label><input class="form-input" value="شركة توزيع البطاريات"></div>
+        <div class="form-group"><label class="form-label">رقم التلفون</label><input class="form-input" value="01xxxxxxxxx"></div>
+        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem">
+          <div style="font-weight:700;margin-bottom:1rem">📦 إعدادات المخزون</div>
+          <div class="form-group"><label class="form-label">سعر الخردة للكيلو (ج)</label><input class="form-input" type="number" value="5"></div>
+          <div class="form-group"><label class="form-label">حد التنبيه للمخزون المنخفض</label><input class="form-input" type="number" value="5" placeholder="عدد الوحدات"></div>
+        </div>
+        <button class="form-btn btn-primary">💾 حفظ الإعدادات</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== ACTIVITY ======================== -->
+<div class="page" id="page-activity">
+  <div class="page-header"><div><div class="page-title">📋 سجل النشاط</div><div class="page-subtitle">تتبع كل حركة في النظام</div></div></div>
+  <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+    <select class="form-input" style="width:auto"><option>المستخدم: الكل</option></select>
+    <select class="form-input" style="width:auto"><option>الإجراء: الكل</option><option>create</option><option>update</option><option>delete</option><option>login</option><option>logout</option></select>
+    <select class="form-input" style="width:auto"><option>نوع الكيان: الكل</option><option>product</option><option>order</option><option>customer</option></select>
+    <button class="form-btn btn-secondary">تطبيق</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>المستخدم</th><th>الإجراء</th><th>الكيان</th><th>IP</th><th>الوقت</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>أحمد</td><td><span class="badge badge-blue">create</span></td><td>order #1002</td><td>192.168.1.1</td><td>02/02/2026 10:30</td></tr>
+        <tr><td>2</td><td>محمود</td><td><span class="badge badge-orange">update</span></td><td>product #5</td><td>192.168.1.2</td><td>02/02/2026 11:00</td></tr>
+        <tr><td>3</td><td>أحمد</td><td><span class="badge badge-green">login</span></td><td>—</td><td>192.168.1.1</td><td>02/02/2026 09:00</td></tr>
+        <tr><td>4</td><td>أحمد</td><td><span class="badge badge-red">delete</span></td><td>expense #3</td><td>192.168.1.1</td><td>02/02/2026 12:15</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alert alert-warn" style="margin-top:1rem"><span>🗂️</span> عند حذف أي سجل يُحفظ تلقائياً في الأرشيف مع إمكانية التراجع</div>
+</div>
+
+<!-- ======================== SECURITY ======================== -->
+<div class="page" id="page-security">
+  <div class="page-header"><div><div class="page-title">🔒 الأمان — حماية سعر التكلفة</div></div></div>
+
+  <div class="section-title"><div class="dot" style="background:var(--red)"></div> آلية إخفاء سعر التكلفة</div>
+  <div class="grid grid-2" style="margin-bottom:1.5rem">
+    <div class="card">
+      <div style="font-weight:700;margin-bottom:12px">🔐 كيف يعمل النظام</div>
+      <div style="font-size:13.5px;color:var(--text2);line-height:2">
+        ✅ سعر التكلفة مخفي في <strong style="color:var(--text)">كل أنحاء النظام</strong><br>
+        ✅ يظهر بدلاً منه: <span class="secret-field" style="display:inline-flex"><span class="stars">●●●●●</span></span><br>
+        ✅ عند الضغط يفتح popup كلمة مرور<br>
+        ✅ كلمة المرور تُحفظ في <strong style="color:var(--text)">قاعدة البيانات</strong><br>
+        ✅ يمكن تفعيل الحماية على <strong style="color:var(--text)">أي عمود</strong><br>
+        ✅ إعداده من <strong style="color:var(--text)">صفحة الإعدادات</strong>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:700;margin-bottom:12px;font-size:14px">نموذج popup كلمة المرور</div>
+      <div class="modal-overlay" style="border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem">
+        <div class="modal-box" style="max-width:100%;padding:1.2rem">
+          <div class="modal-title" style="font-size:14px">🔒 إدخال كلمة المرور لعرض السعر</div>
+          <div class="form-group"><label class="form-label">كلمة المرور</label><input class="form-input" type="password" placeholder="••••••"></div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="form-btn btn-secondary" style="font-size:13px">إلغاء</button>
+            <button class="form-btn btn-primary" style="font-size:13px">عرض السعر</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><div class="dot" style="background:var(--orange)"></div> الأعمدة المحمية (افتراضياً)</div>
+  <div class="grid grid-3">
+    <div class="card-sm"><span class="badge badge-red" style="margin-bottom:6px">محمي</span><div style="font-weight:600;font-size:13px">سعر التكلفة للوحدة</div></div>
+    <div class="card-sm"><span class="badge badge-red" style="margin-bottom:6px">محمي</span><div style="font-weight:600;font-size:13px">توتل سعر التكلفة</div></div>
+    <div class="card-sm"><span class="badge badge-red" style="margin-bottom:6px">محمي</span><div style="font-weight:600;font-size:13px">المكسب في كل طلب</div></div>
+    <div class="card-sm"><span class="badge badge-red" style="margin-bottom:6px">محمي</span><div style="font-weight:600;font-size:13px">صافي الربح (التقارير)</div></div>
+    <div class="card-sm"><span class="badge badge-orange" style="margin-bottom:6px">اختياري</span><div style="font-weight:600;font-size:13px">أي عمود آخر</div></div>
+    <div class="card-sm" style="border:1px dashed var(--border)"><span class="badge badge-gray" style="margin-bottom:6px">من الإعدادات</span><div style="font-weight:600;font-size:13px;color:var(--text2)">تفعيل/تعطيل الحماية</div></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- MODALS -->
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function toggleAcc(header) {
+  const item = header.closest('.acc-item');
+  item.classList.toggle('open');
+}
+function switchTab(group, id) {
+  const tabsEl = document.getElementById(group + '-tabs');
+  if (tabsEl) {
+    tabsEl.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+  }
+  document.querySelectorAll('[id^="' + group + '-tab-"]').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById(group + '-tab-' + id);
+  if (panel) panel.classList.add('active');
+}
+function showModal(id) {
+  const m = document.getElementById(id);
+  if (m) { m.style.display = 'flex'; }
+}
+function hideModal(id) {
+  const m = document.getElementById(id);
+  if (m) { m.style.display = 'none'; }
+}
+function toggleScrapType(val) {
+  const unitF = document.getElementById('scrap-unit-fields');
+  if (unitF) unitF.style.display = val === 'unit' ? 'block' : 'none';
+}
+function calcScrap() {
+  const weight = parseFloat(document.getElementById('scrap-weight')?.value || 0);
+  const total = document.getElementById('scrap-total');
+  if (total) total.textContent = (weight * 5).toFixed(0) + ' ج';
+}
+document.querySelectorAll('.modal-overlay[id]').forEach(m => {
+  m.addEventListener('click', function(e) {
+    if (e.target === this) hideModal(this.id);
+  });
+});
+</script>
+</body>
+</html>
